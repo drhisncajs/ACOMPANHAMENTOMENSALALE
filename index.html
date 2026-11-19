@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Painel de Conteúdo — Espaço Flor de Lótus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--vinho:#54172D;--bordo:#7A3048;--ouro:#C5A15D;--ouro-claro:#E9D9B8;--bg:#FAF7F1;--bg2:#F1EAE1;--tx:#34252B;--card:#fff;--head:#54172D;--btn:#54172D;--line:rgba(84,23,45,.13);--mute:rgba(52,37,43,.68);--sh:0 1px 2px rgba(84,23,45,.06),0 6px 18px rgba(84,23,45,.06);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1D0E15;--bg2:#2A1620;--tx:#F1EAE1;--card:#33202A;--head:#E9D9B8;--btn:#7A3048;--line:rgba(233,217,184,.16);--mute:rgba(241,234,225,.7);--sh:0 1px 2px rgba(0,0,0,.3)}}
+:root[data-theme="dark"]{--bg:#1D0E15;--bg2:#2A1620;--tx:#F1EAE1;--card:#33202A;--head:#E9D9B8;--btn:#7A3048;--line:rgba(233,217,184,.16);--mute:rgba(241,234,225,.7);--sh:0 1px 2px rgba(0,0,0,.3)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--tx);font:400 17px/1.6 Figtree,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;color:var(--head);margin:0;line-height:1.15;font-weight:600}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.side{background:var(--vinho);color:#FAF7F1;position:sticky;top:0;height:100vh;padding:32px 20px;display:flex;flex-direction:column;gap:32px}
+.brand{display:flex;gap:12px;align-items:center}
+.brand svg{width:38px;height:38px;stroke:var(--ouro);stroke-width:1.3}
+.brand b{display:block;font:600 19px/1.15 'Cormorant Garamond',serif;letter-spacing:.14em}
+.brand span{font-size:14px;color:var(--ouro-claro)}
+.plan{font-size:14px;color:var(--ouro-claro);border-top:1px solid rgba(233,217,184,.25);padding-top:16px}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav button{display:flex;align-items:center;gap:14px;background:none;border:0;border-radius:12px;padding:13px 14px;text-align:left;color:#F1EAE1;transition:background .3s,color .3s;position:relative}
+.nav button:hover{background:rgba(250,247,241,.09)}
+.nav button.on{background:rgba(250,247,241,.14);color:#fff}
+.nav button.on::before{content:"";position:absolute;left:-20px;top:12px;bottom:12px;width:3px;border-radius:3px;background:var(--ouro)}
+.nav svg{stroke:var(--ouro)}
+.sync{margin-top:auto;font-size:14px;color:var(--ouro-claro);display:flex;gap:8px;align-items:center}
+.sync i{width:8px;height:8px;border-radius:50%;background:var(--ouro)}
+.top{display:none}
+main{padding:48px 56px 80px;max-width:1120px;width:100%}
+.pg-h{margin-bottom:32px}
+.pg-h h1{font-size:clamp(2rem,4vw,2.75rem)}
+.pg-h p{margin:8px 0 0;color:var(--mute);max-width:62ch}
+.kick{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--bordo);font-weight:600;margin:0 0 16px}
+:root[data-theme="dark"] .kick{color:var(--ouro)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .kick{color:var(--ouro)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat{padding:20px;text-align:left;transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column;gap:4px}
+.stat:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(84,23,45,.1)}
+.stat svg{stroke:var(--ouro);margin-bottom:8px}
+.stat b{font:600 44px/1 'Cormorant Garamond',serif;color:var(--head)}
+.stat span{font-size:15px}
+.stat small{font-size:14px;color:var(--mute)}
+.prog{padding:24px;margin-bottom:48px}
+.prog-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+.prog-top b{font:600 40px/1 'Cormorant Garamond',serif;color:var(--head)}
+.bar{height:10px;border-radius:10px;background:var(--bg2);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ouro);border-radius:10px;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.mini{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;font-size:14px;color:var(--mute)}
+.mini .bar{height:6px;margin-top:6px}
+.up{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.up .card{padding:20px;display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.date{font:600 14px/1 Figtree;letter-spacing:.06em;color:var(--vinho);background:var(--ouro-claro);padding:6px 10px;border-radius:8px}
+.chan{font-size:14px;color:var(--mute)}
+.up h3,.pn h3{font-size:24px}
+.obj{margin:0;font-size:15px;color:var(--mute)}
+.badge{font-size:14px;font-weight:600;padding:4px 12px;border-radius:99px;border:1px solid var(--line);background:var(--bg2);color:var(--tx);white-space:nowrap}
+.badge.s1{background:var(--ouro-claro);border-color:var(--ouro);color:var(--vinho)}
+.badge.s2{background:var(--vinho);border-color:var(--vinho);color:#FAF7F1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:12px;border:1px solid var(--btn);background:var(--btn);color:#FAF7F1;font-weight:600;font-size:16px;transition:transform .3s,background .3s,box-shadow .3s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(84,23,45,.2)}
+.btn.ghost{background:transparent;color:var(--head);border-color:var(--ouro)}
+.btn.ghost:hover{background:var(--ouro-claro);color:var(--vinho)}
+.btn.sm{padding:8px 14px;font-size:15px}
+.btn svg{width:18px;height:18px}
+.up .btn{align-self:flex-start;margin-top:8px}
+.lay{display:grid;grid-template-columns:280px 1fr;gap:28px;align-items:start}
+.dates{display:flex;flex-direction:column;gap:8px;position:sticky;top:24px}
+.dt{display:flex;gap:12px;align-items:center;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px;text-align:left;transition:border-color .3s,background .3s}
+.dt:hover{border-color:var(--ouro)}
+.dt.on{border-color:var(--bordo);background:var(--bg2)}
+.dt b{font-size:16px;min-width:46px;color:var(--head)}
+.dt span{font-size:15px;line-height:1.3;flex:1}
+.dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--ouro);flex:none}
+.dot.s1{background:var(--ouro)}.dot.s2{background:var(--vinho);border-color:var(--vinho)}
+.pn{padding:28px}
+.pn h2{font-size:clamp(1.7rem,3vw,2.2rem);margin:12px 0}
+.meta{display:flex;flex-direction:column;gap:12px;margin:16px 0 24px}
+.meta p{margin:0}
+.meta strong{color:var(--head)}
+.vis{background:var(--bg2);border-left:3px solid var(--ouro);border-radius:10px;padding:14px 16px;font-size:16px}
+.acts{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:24px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{background:var(--card);border:0;padding:10px 14px;font-size:15px;transition:background .3s}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--ouro-claro);color:var(--vinho);font-weight:600}
+.sts{display:flex;flex-direction:column;gap:12px}
+.st{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--bg)}
+.st-h{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.st-h b{font-size:15px;letter-spacing:.08em;color:var(--bordo);text-transform:uppercase}
+:root[data-theme="dark"] .st-h b{color:var(--ouro)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .st-h b{color:var(--ouro)}}
+.txt{white-space:pre-wrap;margin:0}
+mark{background:var(--ouro-claro);color:var(--vinho);border-radius:4px;padding:0 4px}
+.acc{margin-bottom:12px;overflow:hidden}
+.acc-h{width:100%;display:flex;align-items:center;gap:12px;padding:18px 20px;background:none;border:0;text-align:left;flex-wrap:wrap}
+.acc-h .tt{flex:1;min-width:200px;font:600 22px/1.2 'Cormorant Garamond',serif;color:var(--head)}
+.acc-h .ch{transition:transform .3s}
+.acc.open .ch{transform:rotate(180deg)}
+.acc-b{display:none;padding:4px 20px 24px;border-top:1px solid var(--line)}
+.acc.open .acc-b{display:block}
+.kv{display:flex;gap:24px;flex-wrap:wrap;margin:16px 0}
+.kv p{margin:0}.kv strong{color:var(--head)}
+.sub{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:24px 0 10px;font-weight:600}
+.chk{display:flex;gap:12px;align-items:center;padding:10px 0;cursor:pointer;font-size:16px}
+.chk input{width:22px;height:22px;accent-color:var(--vinho);flex:none;cursor:pointer}
+.tags{color:var(--bordo);font-weight:500;margin-top:12px}
+.pil{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}
+.pil div{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.pil b{display:block;color:var(--head);font:600 22px 'Cormorant Garamond',serif}
+.pil span{font-size:15px;color:var(--mute)}
+.vipo{background:var(--vinho);color:#FAF7F1;border-radius:18px;padding:24px;margin-bottom:32px}
+.vipo h3{color:var(--ouro-claro);font-size:26px;margin-bottom:8px;letter-spacing:.04em}
+.vipo p{margin:4px 0}
+.goal{padding:24px;margin-bottom:32px}
+.goal p{margin:0}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 96px);transform:translate(-50%,20px);background:var(--vinho);color:#FAF7F1;border:1px solid var(--ouro);padding:12px 20px;border-radius:12px;opacity:0;pointer-events:none;transition:all .35s;z-index:50;font-weight:500}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.bot{display:none}
+@media (max-width:900px){
+.app{display:block}.side{display:none}
+.top{display:block;position:sticky;top:env(safe-area-inset-top,0px);background:var(--vinho);color:#FAF7F1;padding:12px 20px;z-index:20}
+.top b{display:block;font:600 17px/1.2 'Cormorant Garamond',serif;letter-spacing:.14em}.top span{font-size:14px;color:var(--ouro-claro)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--vinho);z-index:30}
+main{padding:28px 16px 120px}
+.stats{grid-template-columns:repeat(2,1fr)}.up{grid-template-columns:1fr}
+.mini{grid-template-columns:repeat(2,1fr)}.pil{grid-template-columns:1fr}
+.lay{grid-template-columns:1fr}
+.dates{flex-direction:row;overflow-x:auto;position:static;padding-bottom:6px}
+.dt{flex:none;min-width:190px}
+.pn{padding:20px 16px}
+.bot{display:flex;position:fixed;left:0;right:0;bottom:0;background:var(--vinho);padding:8px 4px calc(env(safe-area-inset-bottom,0px) + 8px);z-index:40}
+.bot button{flex:1;background:none;border:0;color:var(--ouro-claro);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13px;padding:6px 0}
+.bot button.on{color:#fff}.bot button.on svg{stroke:var(--ouro)}
+.btn{width:100%}.acts .seg{width:100%}.seg button{flex:1}.up .btn{width:auto}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+ <div class="brand"><svg class="i" viewBox="0 0 24 24"><path d="M12 4c2.5 3 2.5 8 0 12-2.5-4-2.5-9 0-12z"/><path d="M12 16c-3-.5-6-3-7-7 3 0 6 2 7 7z"/><path d="M12 16c3-.5 6-3 7-7-3 0-6 2-7 7z"/><path d="M5 19h14"/></svg><div><b>ESPAÇO FLOR DE LÓTUS</b><span>Painel de Conteúdo</span></div></div>
+ <nav class="nav" id="nav"></nav>
+ <div class="plan">Planejamento: Novembro e Dezembro de 2026.</div>
+ <div class="sync"><i></i><span id="sync">Conectando…</span></div>
+</aside>
+<div>
+ <div class="top"><b>ESPAÇO FLOR DE LÓTUS</b><span>Painel de Conteúdo · Nov e Dez de 2026</span></div>
+ <main id="main"></main>
+</div>
+</div>
+<nav class="bot" id="bot"></nav>
+<div class="toast" id="toast">Copiado com sucesso!</div>
+
+<script>
+/* ===== CONTEÚDO (reproduzido do briefing) ===== */
+const RAW_S=`
+=== s1 | 19/11 | SAVE THE DATE
+OBJ: criar expectativa para a campanha sem revelar antecipadamente a oferta.
+VIS: fundo vinho ou bordô, letras douradas, poucos elementos e destaque para a data. Utilizar a identidade visual da campanha.
+--- STORY ÚNICO
+SAVE THE DATE
+
+23.11
+
+Vem aí uma oportunidade especial para você que merece um momento de cuidado!
+
+BLACK FRIDAY DO AUTOCUIDADO
+
+Prepare-se para reservar um momento só seu!
+=== s2 | 23/11 | LANÇAMENTO OFICIAL DA BLACK FRIDAY
+OBJ: apresentar a condição especial de limpeza de pele, gerar agendamentos e atrair participantes para o Grupo VIP.
+VIS: alternar foto real da limpeza de pele, textos com a identidade visual da campanha e telas finais com links clicáveis. Destacar o preço promocional.
+--- STORY 1 — IDENTIFICAÇÃO
+Você cuida da casa, dos filhos, da família, do trabalho...
+
+Cuida de tantas coisas e de tantas pessoas.
+
+Mas também precisa reservar um momento para cuidar de você!
+--- STORY 2 — CONEXÃO
+Chegou a hora de colocar seu autocuidado na agenda!
+
+Você merece um momento de atenção, carinho e cuidado.
+--- STORY 3 — OFERTA
+BLACK FRIDAY DO AUTOCUIDADO!
+
+Uma oportunidade especial para cuidar da sua pele!
+
+LIMPEZA DE PELE
+
+De R$ 190,00 por apenas R$ 150,00!
+
+Condição especial até 27/11.
+--- STORY 4 — AGENDAMENTO
+Quer aproveitar essa condição especial?
+
+Me chame pelo WhatsApp e reserve seu horário!
+
+[INSERIR LINK DO WHATSAPP]
+--- STORY 5 — GRUPO VIP
+Quer receber novidades, dicas de autocuidado e condições especiais?
+
+Entre para o nosso Grupo VIP!
+
+Lá você fica por dentro das próximas novidades do Espaço Flor de Lótus.
+
+[INSERIR LINK DO GRUPO VIP]
+=== s3 | 24/11 | CONHEÇA O GRUPO VIP
+OBJ: aumentar a comunidade e fortalecer o relacionamento com as clientes.
+VIS: utilizar gravação de tela do Grupo VIP, mostrando um pouco dos conteúdos e benefícios. Ocultar nomes, telefones e mensagens privadas das participantes.
+--- STORY 1 — APRESENTAÇÃO
+Você já conhece o nosso Grupo VIP?
+
+Preparei um espaço especial para estarmos ainda mais pertinho!
+--- STORY 2 — BENEFÍCIOS
+Por lá você encontra:
+
+Dicas de autocuidado.
+
+Conteúdos especiais.
+
+Novidades sobre nossos tratamentos.
+
+Condições e oportunidades exclusivas.
+--- STORY 3 — DIFERENCIAL
+As participantes do grupo também recebem informações sobre novidades e condições especiais em primeira mão!
+
+É um espaço para compartilhar cuidado e novidades.
+--- STORY 4 — CTA
+Quer fazer parte?
+
+Entre para o nosso Grupo VIP e acompanhe tudo de pertinho!
+
+[INSERIR LINK DO GRUPO VIP]
+=== s4 | 26/11 | REFORÇO DA OFERTA BLACK FRIDAY
+OBJ: retomar o interesse de quem viu a campanha, mas ainda não agendou.
+VIS: utilizar a identidade visual da campanha, uma foto real do procedimento e destaque para o valor e a data de encerramento.
+--- STORY 1 — RETOMADA
+Você viu nossa condição especial de Black Friday?
+
+Ainda dá tempo de reservar seu momento de autocuidado!
+--- STORY 2 — OFERTA
+Sua limpeza de pele com condição especial:
+
+De R$ 190,00 por apenas R$ 150,00!
+
+Uma oportunidade para dedicar atenção à sua pele.
+--- STORY 3 — PRAZO
+Mas atenção!
+
+Essa condição especial é válida somente até amanhã, 27/11.
+--- STORY 4 — CTA
+Não deixe seu momento de cuidado para depois!
+
+Me chame pelo WhatsApp e consulte os horários disponíveis.
+
+[INSERIR LINK DO WHATSAPP]
+=== s5 | 27/11 | ÚLTIMA CHAMADA BLACK FRIDAY
+OBJ: converter interessadas e encerrar a condição promocional.
+VIS: utilizar foto real da limpeza de pele, destacar o preço promocional e manter a data de validade visível.
+--- STORY 1 — CHAMADA
+É HOJE!
+
+Último dia da nossa Black Friday do Autocuidado!
+--- STORY 2 — OFERTA
+Ainda dá tempo de aproveitar!
+
+LIMPEZA DE PELE
+
+De R$ 190,00 por apenas R$ 150,00.
+--- STORY 3 — ENCERRAMENTO
+A condição especial termina hoje!
+
+Se você estava esperando uma oportunidade para cuidar da sua pele, aproveite essa condição.
+--- STORY 4 — CTA
+Vamos reservar seu horário?
+
+Me chama pelo WhatsApp e consulte a disponibilidade!
+
+[INSERIR LINK DO WHATSAPP]
+=== s6 | 03/12 | DRENAGEM LINFÁTICA: CUIDADO ALÉM DA ESTÉTICA
+OBJ: educar, apresentar a técnica e fortalecer o posicionamento profissional da Ale.
+VIS: priorizar vídeo real da Ale realizando a técnica ou explicando o atendimento. Também podem ser utilizadas fotos do procedimento. Evitar imagens que sugiram resultados garantidos.
+--- STORY 1 — QUEBRA DE CRENÇA
+Drenagem linfática vai muito além da estética!
+
+É também uma forma de cuidar do corpo e conhecer melhor o funcionamento do nosso organismo.
+--- STORY 2 — INFORMAÇÃO
+Você sabia?
+
+Nosso sistema linfático participa do transporte da linfa e ajuda a manter o equilíbrio dos líquidos no organismo.
+
+Ele também desempenha um papel importante nas defesas do corpo.
+--- STORY 3 — EXPLICAÇÃO
+A drenagem linfática manual utiliza movimentos suaves e específicos para estimular o fluxo da linfa.
+
+Quando bem indicada, a técnica pode auxiliar na redução de edemas e na sensação de inchaço.
+--- STORY 4 — HUMANIZAÇÃO
+Cada corpo tem suas particularidades.
+
+Por isso, o atendimento precisa respeitar as necessidades individuais e considerar a indicação adequada da técnica.
+
+Aqui no Espaço Flor de Lótus, cada cuidado é realizado com atenção e carinho.
+--- STORY 5 — CTA
+Quer conhecer melhor a drenagem linfática?
+
+Converse comigo pelo WhatsApp e saiba mais sobre o atendimento!
+
+[INSERIR LINK DO WHATSAPP]
+=== s7 | 08/12 | MASSAGEM RELAXANTE: SUA PAUSA EM DEZEMBRO
+OBJ: despertar desejo pela experiência e incentivar consultas de horários.
+VIS: utilizar vídeos da sala preparada, toalhas, iluminação, ambiente e pequenos trechos reais do atendimento.
+--- STORY 1 — IDENTIFICAÇÃO
+Dezembro chegou e a lista de compromissos parece não terminar...
+
+Entre trabalho, família, compras e preparativos, você também precisa de uma pausa.
+--- STORY 2 — APRESENTAÇÃO
+A massagem relaxante é uma oportunidade de reservar um momento para seu bem-estar, aliviar tensões do dia a dia e desacelerar.
+--- STORY 3 — EXPERIÊNCIA
+Imagine deixar os compromissos de lado por um instante...
+
+Um ambiente acolhedor.
+
+Um atendimento individualizado.
+
+Um momento dedicado inteiramente a você.
+--- STORY 4 — CTA
+Que tal reservar esse momento antes das festas de fim de ano?
+
+Consulte os horários disponíveis no Espaço Flor de Lótus!
+
+[INSERIR LINK DO WHATSAPP]
+=== s8 | 12/12 | LIMPEZA DE PELE ANTES DO NATAL
+OBJ: estimular agendamentos de limpeza de pele antes das festas de fim de ano.
+VIS: utilizar fotos reais da Ale realizando a limpeza de pele. Não anunciar novo desconto sem aprovação.
+--- STORY 1 — GANCHO
+O Natal está chegando!
+
+E você já começou a preparar tudo para as festas?
+--- STORY 2 — IDENTIFICAÇÃO
+Presentes, roupas, compromissos, confraternizações...
+
+São tantas coisas para organizar!
+
+Mas não se esqueça de reservar um momento para cuidar de você.
+--- STORY 3 — APRESENTAÇÃO DO SERVIÇO
+Que tal incluir a limpeza de pele na sua rotina de cuidados neste mês?
+
+Um atendimento profissional para dedicar atenção à sua pele, respeitando suas necessidades.
+--- STORY 4 — CTA
+Vamos organizar seu momento de autocuidado antes do Natal?
+
+Consulte os horários disponíveis e agende sua limpeza de pele!
+
+[INSERIR LINK DO WHATSAPP]
+=== s9 | 15/12 | MASSAGEM RELAXANTE: RESERVE SUA PAUSA
+OBJ: estimular a reserva antecipada de horários para massagem antes do Natal.
+VIS: utilizar vídeo da sala preparada ou imagens reais da massagem. Variar os ângulos e materiais em relação à sequência de 08/12. Se possível, mostrar a disponibilidade real de horários.
+--- STORY 1 — IDENTIFICAÇÃO
+Dezembro é tempo de encontros, comemorações e tantos compromissos...
+
+Mas não precisa ser só sobre fazer tudo pelos outros.
+--- STORY 2 — CONEXÃO
+Você também merece receber cuidado!
+
+Permita-se uma pausa, um momento de relaxamento e atenção ao seu bem-estar.
+--- STORY 3 — DESEJO
+Que tal se presentear com uma massagem relaxante antes do Natal?
+
+Um momento para desacelerar e aproveitar uma experiência dedicada a você.
+--- STORY 4 — CTA
+Estou organizando os agendamentos deste período!
+
+Quer consultar os horários disponíveis para sua massagem relaxante?
+
+Me chama pelo WhatsApp!
+
+[INSERIR LINK DO WHATSAPP]
+`;
+const RAW_I=`
+=== i1 | 20/11 | BLACK FRIDAY DO AUTOCUIDADO
+FMT: Carrossel — 5 cards
+OBJ: Atrair novas clientes, divulgar a condição especial e direcionar interessadas ao Grupo VIP.
+--- CARD 1 — GANCHO
+Você cuida de tantas coisas todos os dias.
+
+Mas quando chega a sua vez de receber cuidado?
+
+A Black Friday do Autocuidado chegou! 🪷
+--- CARD 2 — IDENTIFICAÇÃO
+Entre trabalho, casa, família e compromissos, é fácil deixar o próprio bem-estar para depois.
+
+Mas você também merece reservar um momento para si. ❤️
+--- CARD 3 — APRESENTAÇÃO DA OFERTA
+Neste mês, sua pele pode receber um cuidado especial!
+
+BLACK FRIDAY DA LIMPEZA DE PELE
+
+De R$ 190,00 por apenas R$ 150,00!
+
+Condição especial até 27/11.
+--- CARD 4 — VALORIZAÇÃO
+Mais do que um momento de beleza, a limpeza de pele é uma oportunidade de dedicar atenção à sua pele.
+
+Um cuidado realizado de forma individualizada, respeitando as necessidades de cada pessoa.
+--- CARD 5 — CTA
+Seu momento de autocuidado pode começar agora!
+
+Entre no nosso GRUPO VIP e conheça também as condições e benefícios especiais da Black Friday.
+
+Espaço Flor de Lótus — Alexsandra Rosa.
+--- LEGENDA
+Você passa tantos dias cuidando de tudo e de todos. Que tal reservar um momento para cuidar de você? ❤️
+
+A Black Friday do Autocuidado chegou ao Espaço Flor de Lótus!
+
+Nossa limpeza de pele está com uma condição especial:
+
+✨ De R$ 190,00 por apenas R$ 150,00!
+
+Uma oportunidade para dedicar um tempo à sua pele e aproveitar um atendimento individualizado.
+
+Quer conhecer também as condições especiais da campanha?
+
+Entre no nosso Grupo VIP pelo link disponível na bio!
+
+Ou, se preferir, fale diretamente com a Ale pelo WhatsApp para agendar.
+
+🪷 Espaço Flor de Lótus — seu momento de cuidado, acolhimento e bem-estar.
+
+#BlackFriday #LimpezaDePele #Autocuidado #EspaçoFlorDeLótus #Itapevi
+=== i2 | 25/11 | LIMPEZA DE PELE: MAIS QUE ESTÉTICA
+FMT: Carrossel — 6 cards
+OBJ: Educar, despertar interesse pelo procedimento e incentivar agendamentos.
+--- CARD 1 — GANCHO
+Sua pele também precisa de atenção.
+
+E não é apenas quando aparece alguma imperfeição.
+--- CARD 2 — IDENTIFICAÇÃO
+Ao longo do dia, a pele entra em contato com oleosidade, resíduos, poluição e outras impurezas.
+
+Por isso, manter uma rotina de cuidados é tão importante.
+--- CARD 3 — DESENVOLVIMENTO
+A limpeza de pele é um procedimento que auxilia na higienização da pele e na remoção de impurezas e comedões, quando indicados.
+
+Um cuidado que vai além da aparência.
+--- CARD 4 — BENEFÍCIOS DO PROCEDIMENTO
+Entre os cuidados que fazem parte da limpeza de pele estão:
+
+- Higienização profunda.
+- Remoção de impurezas.
+- Cuidados com os poros e comedões.
+- Atenção às necessidades específicas da pele.
+--- CARD 5 — ATENDIMENTO INDIVIDUALIZADO
+Cada pele tem suas características.
+
+Por isso, os cuidados precisam considerar o tipo de pele, suas necessidades e suas particularidades.
+
+No Espaço Flor de Lótus, cada atendimento é pensado com atenção e cuidado. ❤️
+--- CARD 6 — CTA
+Sua pele merece esse momento de atenção!
+
+Agende sua limpeza de pele com a Ale.
+
+Espaço Flor de Lótus — Itapevi/SP.
+
+Entre em contato pelo WhatsApp e consulte os horários disponíveis.
+--- LEGENDA
+Cuidar da pele não precisa ser algo complicado. Mas precisa de atenção!
+
+A limpeza de pele é um procedimento que auxilia na higienização, na remoção de impurezas e nos cuidados com os comedões, respeitando as características de cada pele.
+
+Mais do que pensar somente na estética, é importante entender as necessidades da sua pele e oferecer os cuidados adequados.
+
+No Espaço Flor de Lótus, cada atendimento é realizado de maneira individualizada. ❤️
+
+Reserve um momento para cuidar de você!
+
+Agende sua limpeza de pele pelo WhatsApp.
+
+📍 Atendimento em Itapevi/SP.
+
+#LimpezaDePele #CuidadosComAPele #EstéticaFacial #Autocuidado #Itapevi
+=== i3 | 04/12 | DRENAGEM LINFÁTICA: CUIDADO QUE VAI ALÉM DA ESTÉTICA
+FMT: Carrossel — 7 cards
+OBJ: Ampliar a percepção sobre a drenagem linfática, apresentar sua relação com o sistema linfático e fortalecer a autoridade profissional da Ale.
+--- CARD 1 — GANCHO
+Drenagem linfática não é apenas sobre estética.
+
+É também sobre conhecer e cuidar do seu corpo.
+--- CARD 2 — CONHECIMENTO
+Você já ouviu falar no sistema linfático?
+
+Ele faz parte do nosso organismo e atua no transporte da linfa, um líquido que circula pelos vasos linfáticos.
+
+Esse sistema também participa das funções de defesa do organismo.
+--- CARD 3 — IDENTIFICAÇÃO
+Sabe aquela sensação de inchaço e desconforto que pode acompanhar a retenção de líquidos?
+
+O acúmulo de líquido nos tecidos pode estar relacionado a diferentes fatores.
+
+E é importante entender o que está acontecendo com o seu corpo.
+--- CARD 4 — EXPLICAÇÃO DO PROCEDIMENTO
+A drenagem linfática é uma técnica manual que utiliza movimentos suaves e específicos para estimular o fluxo da linfa.
+
+Ela pode auxiliar na redução de edemas e na sensação de inchaço, conforme a indicação e as características de cada pessoa.
+--- CARD 5 — ALÉM DA ESTÉTICA
+O cuidado corporal não deve ser visto apenas pelo resultado visual.
+
+Também envolve atenção às necessidades do organismo, conforto e bem-estar.
+
+Cada corpo tem sua história e merece um atendimento individualizado.
+--- CARD 6 — ATENDIMENTO
+No Espaço Flor de Lótus, a Ale oferece um atendimento personalizado, considerando as necessidades e particularidades de cada cliente.
+
+O primeiro passo é entender qual cuidado é adequado para você.
+--- CARD 7 — CTA
+Seu corpo merece atenção e cuidado.
+
+Conheça a drenagem linfática do Espaço Flor de Lótus.
+
+Converse com a Ale pelo WhatsApp e agende seu atendimento em Itapevi/SP.
+--- LEGENDA
+Drenagem linfática vai muito além da estética! ❤️
+
+Nosso sistema linfático desempenha funções importantes no organismo, incluindo o transporte da linfa e a participação nas defesas do corpo.
+
+A drenagem linfática é uma técnica manual que utiliza movimentos suaves e específicos para estimular o fluxo linfático.
+
+Ela pode auxiliar nos casos de edema e na sensação de inchaço, quando existe indicação adequada.
+
+Por isso, cada atendimento precisa considerar as necessidades individuais.
+
+No Espaço Flor de Lótus, o cuidado começa com atenção ao que seu corpo precisa. 🪷
+
+Quer conhecer melhor esse procedimento?
+
+Converse com a Ale pelo WhatsApp e agende seu atendimento.
+
+📍 Espaço Flor de Lótus — Itapevi/SP.
+
+#DrenagemLinfática #BemEstar #CuidadoCorporal #Autocuidado #Itapevi
+=== i4 | 11/12 | MASSAGEM RELAXANTE: VOCÊ TAMBÉM PRECISA DE UMA PAUSA
+FMT: Carrossel — 5 cards
+OBJ: Despertar desejo pelo atendimento, valorizar a experiência e incentivar agendamentos antes do Natal.
+--- CARD 1 — GANCHO
+E se, por alguns instantes, você pudesse esquecer tudo lá fora?
+--- CARD 2 — EXPERIÊNCIA
+Um ambiente acolhedor, movimentos suaves e um momento dedicado inteiramente ao seu bem-estar.
+--- CARD 3 — APRESENTAÇÃO DO SERVIÇO
+A massagem relaxante é uma experiência de cuidado corporal que utiliza movimentos manuais para proporcionar relaxamento e conforto.
+
+Um momento para desacelerar e se dedicar ao próprio bem-estar.
+--- CARD 4 — VALORIZAÇÃO
+Imagine deixar os compromissos do lado de fora por um instante.
+
+Um ambiente acolhedor.
+
+Um atendimento individualizado.
+
+Um momento em que a atenção está voltada para você. ❤️
+--- CARD 5 — CTA
+Neste dezembro, inclua você na sua lista de prioridades!
+
+Agende sua massagem relaxante no Espaço Flor de Lótus.
+
+Consulte os horários disponíveis pelo WhatsApp.
+
+Alexsandra Rosa — Itapevi/SP.
+--- LEGENDA
+Dezembro costuma ser um mês cheio de compromissos.
+
+É o encerramento de um ano, a preparação para as festas e tantas coisas acontecendo ao mesmo tempo.
+
+Mas, em meio a tudo isso, existe algo que também merece espaço na sua agenda: você! ❤️
+
+A massagem relaxante é uma oportunidade de reservar um momento para desacelerar, aliviar as tensões do dia a dia e desfrutar de uma experiência de cuidado corporal.
+
+No Espaço Flor de Lótus, você encontra um ambiente acolhedor e atendimento personalizado.
+
+Não deixe seu bem-estar sempre para depois.
+
+Consulte os horários disponíveis e agende sua massagem relaxante pelo WhatsApp.
+
+🪷 Espaço Flor de Lótus — seu momento de cuidado, acolhimento e bem-estar.
+
+📍 Itapevi/SP.
+
+#MassagemRelaxante #BemEstar #Autocuidado #MomentoDeCuidado #Itapevi
+`;
+const RAW_G=`
+=== g1 | Data a confirmar | BLACK FRIDAY DO AUTOCUIDADO
+--- TÍTULO DA ARTE
+BLACK FRIDAY DO AUTOCUIDADO
+--- TEXTO PRINCIPAL DA ARTE
+Sua pele merece esse cuidado!
+
+Limpeza de pele de R$ 190 por R$ 150.
+
+Condição especial até 27/11.
+--- LEGENDA GOOGLE
+✨ BLACK FRIDAY DO AUTOCUIDADO NO ESPAÇO FLOR DE LÓTUS!
+
+Que tal aproveitar esse momento para cuidar da sua pele?
+
+Durante nossa campanha de Black Friday, você pode aproveitar uma condição especial na limpeza de pele:
+
+De R$ 190,00 por R$ 150,00!
+
+A limpeza de pele é uma oportunidade de dedicar atenção à saúde e aos cuidados da sua pele, com um atendimento personalizado e realizado com carinho.
+
+📍 Atendimento em Itapevi – SP.
+
+⏳ Condição válida até 27 de novembro de 2026.
+
+Agende seu horário pelo WhatsApp e aproveite essa condição especial!
+=== g2 | Data a confirmar | LIMPEZA DE PELE
+--- TÍTULO DA ARTE
+SUA PELE MERECE ATENÇÃO E CUIDADO.
+--- TEXTO PRINCIPAL DA ARTE
+Conheça a limpeza de pele do Espaço Flor de Lótus.
+--- LEGENDA GOOGLE
+🌸 QUANDO FOI A ÚLTIMA VEZ QUE VOCÊ DEDICOU UM TEMPO PARA CUIDAR DA SUA PELE?
+
+A limpeza de pele é um cuidado importante para remover impurezas, auxiliar na desobstrução dos poros e manter a pele com aparência mais saudável.
+
+No Espaço Flor de Lótus, em Itapevi, cada atendimento é realizado com atenção e cuidado, respeitando as necessidades individuais de cada cliente.
+
+✨ Um momento de autocuidado para você se sentir bem com a sua pele!
+
+📍 Estamos em Itapevi – SP.
+
+Quer conhecer nosso atendimento? Entre em contato pelo WhatsApp e agende sua limpeza de pele!
+`;
+const RAW_V=`
+=== v1 | 21/11 | AQUECIMENTO
+--- MSG
+Meninas, a nossa Black Friday do Autocuidado está chegando! ❤️🪷
+
+Preparei algumas oportunidades especiais para vocês que fazem parte deste grupo.
+
+A ideia é aproveitar esse momento para cuidar de si e reservar um tempinho para o seu bem-estar.
+
+Amanhã vou compartilhar uma experiência especial que preparei para vocês! 💆🏻‍♀️
+=== v2 | 23/11 | OFERTA EXCLUSIVA VIP
+--- MSG
+Meninas, chegou a hora de compartilhar nossa condição especial! ❤️
+
+✨ EXPERIÊNCIA ESPECIAL DE AUTOCUIDADO
+
+Limpeza de pele + retorno para revitalização em 15 dias.
+
+Investimento: R$ 250,00.
+
+Uma oportunidade especial para cuidar da pele em duas etapas, com atendimento individualizado.
+
+Essa condição foi preparada especialmente para vocês do Grupo VIP!
+
+Para saber mais e reservar seu atendimento, é só me chamar no particular. 🪷
+
+Consulte as condições e a disponibilidade dos horários.
+=== v3 | 24/11 | DICA DE AUTOCUIDADO
+--- MSG
+Uma dica de autocuidado para vocês! ❤️
+
+Manter uma rotina de cuidados com a pele vai muito além de utilizar produtos no dia a dia.
+
+A higienização adequada, a escolha dos produtos certos e os cuidados profissionais, quando indicados, fazem parte de uma rotina de atenção à saúde da pele.
+
+Cada pele tem suas necessidades!
+
+E você, costuma reservar um tempinho para cuidar da sua? 🌸
+=== v4 | 26/11 | REFORÇO DA OFERTA
+--- MSG
+Meninas, passando para lembrar que nossa condição especial de Black Friday está chegando ao fim! ❤️
+
+Se você estava pensando em aproveitar nossa experiência de limpeza de pele + retorno para revitalização, ainda dá tempo de conversar comigo e consultar os horários disponíveis.
+
+Essa condição foi preparada especialmente para vocês do Grupo VIP. 🪷
+
+Me chama no particular para saber mais!
+=== v5 | 27/11 | ENCERRAMENTO DA BLACK
+--- MSG
+Meninas, hoje é o último dia da nossa Black Friday do Autocuidado! ❤️
+
+Hoje encerramos as condições especiais da campanha.
+
+Se você deseja aproveitar nossa experiência de limpeza de pele com retorno para revitalização, entre em contato comigo para consultar as condições e os horários disponíveis.
+
+Obrigada por fazerem parte desse espaço tão especial! 🪷
+=== v6 | 03/12 | DICA SOBRE DRENAGEM LINFÁTICA
+--- MSG
+Meninas, vamos falar um pouquinho sobre cuidado corporal? ❤️
+
+Vocês sabiam que o sistema linfático participa do equilíbrio dos líquidos do nosso organismo?
+
+A drenagem linfática é uma técnica manual que utiliza movimentos suaves e específicos para estimular o fluxo da linfa.
+
+Quando bem indicada, pode auxiliar na redução de edemas e na sensação de inchaço.
+
+Cada corpo tem suas particularidades e merece um cuidado individualizado! 🪷
+=== v7 | 08/12 | MASSAGEM RELAXANTE
+--- MSG
+Dezembro chegou e, junto com ele, tantos compromissos! ❤️
+
+Entre trabalho, família e preparativos, às vezes esquecemos de reservar um momento para nós mesmas.
+
+Você também merece receber cuidado!
+
+A massagem relaxante é uma oportunidade de desacelerar, aliviar as tensões do dia a dia e aproveitar um momento dedicado ao seu bem-estar.
+
+Que tal incluir esse momento na sua agenda de dezembro? 💆🏻‍♀️
+=== v8 | 12/12 | LIMPEZA DE PELE
+--- MSG
+O Natal está chegando! 🎄❤️
+
+E em meio a tantos preparativos, presentes e compromissos, não se esqueça de reservar um momento para você!
+
+Que tal incluir a limpeza de pele na sua rotina de cuidados antes das festas?
+
+É uma oportunidade de dedicar atenção à sua pele e aproveitar um atendimento pensado nas suas necessidades.
+
+Se quiser consultar os horários disponíveis, me chama no particular! 🪷
+=== v9 | 15/12 | CONVITE PARA MASSAGEM
+--- MSG
+Meninas, passando para lembrar que vocês também merecem um momento de pausa neste fim de ano! ❤️
+
+Que tal se presentear com uma massagem relaxante antes do Natal?
+
+Um ambiente acolhedor, um atendimento individualizado e um momento dedicado inteiramente ao seu bem-estar.
+
+Estou organizando os agendamentos deste período.
+
+Quem quiser consultar os horários disponíveis, é só me chamar no particular! 🪷
+`;
+
+/* ===== PARSE ===== */
+function parse(raw){return raw.trim().split(/^=== /m).filter(Boolean).map(b=>{
+ const L=b.split('\n'),[id,date,title]=L.shift().split(' | ');
+ const o={id,date,title,meta:{},blk:[]};let cur=null;
+ for(const l of L){if(l.startsWith('--- ')){cur={label:l.slice(4),t:[]};o.blk.push(cur)}
+  else if(cur)cur.t.push(l);else{const m=l.match(/^([A-Z]+): (.*)$/);if(m)o.meta[m[1]]=m[2]}}
+ o.blk.forEach(x=>x.text=x.t.join('\n').trim());return o})}
+const ST=parse(RAW_S),IG=parse(RAW_I),GG=parse(RAW_G),VP=parse(RAW_V);
+IG.forEach((p,i)=>{p.num='POST 0'+(i+1);p.cards=p.blk.filter(b=>b.label!=='LEGENDA');
+ const lg=p.blk.find(b=>b.label==='LEGENDA').text,k=lg.lastIndexOf('\n\n');p.cap=lg.slice(0,k);p.tags=lg.slice(k+2)});
+GG.forEach((p,i)=>p.num='POST 0'+(i+1));
+const CK=['Cards criados com os textos do painel','Legenda e hashtags coladas','Post publicado no Instagram'];
+const dk=d=>{const m=d.match(/^(\d\d)\/(\d\d)/);return m?m[2]*100+ +m[1]:9999};
+const ITEMS=[
+ ...ST.map(s=>({id:s.id,ch:'Stories',tab:'stories',date:s.date,title:s.title,obj:s.meta.OBJ})),
+ ...IG.map(p=>({id:p.id,ch:'Instagram',tab:'instagram',date:p.date,title:p.num+' — '+p.title,obj:p.meta.OBJ})),
+ ...GG.map(p=>({id:p.id,ch:'Google',tab:'google',date:p.date,title:p.num+' — '+p.title,obj:''})),
+ ...VP.map(p=>({id:p.id,ch:'Grupo VIP',tab:'vip',date:p.date,title:p.title,obj:''}))
+].map(x=>({...x,dk:dk(x.date)}));
+
+/* ===== ESTADO + SINCRONIZAÇÃO ===== */
+let S={},db=null,mode='local';
+const LS='flor-lotus-estado';
+const sid=k=>k.replace(/[^A-Za-z0-9_-]/g,'_');
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+function loadLocal(){try{S=JSON.parse(localStorage.getItem(LS)||'{}')||{}}catch(e){S={}}}
+function setSync(){$('#sync').textContent=mode==='db'?'Sincronizado online':'Salvo neste aparelho'}
+async function initDb(){
+ try{if(window.claude&&claude.use)db=await Promise.race([claude.use('db'),new Promise(r=>setTimeout(()=>r(null),10000))])}catch(e){db=null}
+ if(!db){setSync();return}
+ try{db.collection('estado').onSnapshot(snap=>{const n={};snap.docs.forEach(d=>{const x=d.data();if(x&&x.k)n[x.k]=x.v});S=n;mode='db';setSync();render()},()=>{mode='local';setSync()})}catch(e){mode='local';setSync()}
+}
+function put(k,v){S[k]=v;saveLocal();render();
+ if(db&&mode==='db')db.doc('estado/'+sid(k)).set({k,v}).catch(()=>toast('Não foi possível sincronizar agora',1))}
+const stat=id=>id[0]==='i'?(n=>n===CK.length?2:n?1:0)(CK.filter((_,j)=>S['ck:'+id+':'+j]).length):(S['st:'+id]||0);
+const SL=['Pendente','Em andamento','Publicado'];
+const badge=id=>`<span class="badge s${stat(id)}">${SL[stat(id)]}</span>`;
+
+/* ===== UTIL ===== */
+const $=s=>document.querySelector(s);
+const esc=t=>t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const txt=t=>esc(t).replace(/\[INSERIR[^\]]*\]/g,m=>'<mark>'+m+'</mark>');
+const IC={home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+stories:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>',
+instagram:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/>',
+google:'<path d="M12 21s-7-6.2-7-11.2A7 7 0 0 1 19 9.8C19 14.8 12 21 12 21z"/><circle cx="12" cy="10" r="2.5"/>',
+vip:'<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4l-5.3 3 1.2-6L3.4 9.3l6-.7z"/>',
+copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/>',
+check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',chev:'<path d="M6 9l6 6 6-6"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>'};
+const ico=n=>`<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
+const TABS=[['visao','Visão geral','Início','home'],['stories','Stories','Stories','stories'],['instagram','Posts do Instagram','Instagram','instagram'],['google','Posts do Google','Google','google'],['vip','Estratégia do Grupo VIP','Grupo VIP','vip']];
+let tab='visao',selS='s1',openI=null,openV=null;
+let tt;function toast(m,e){const t=$('#toast');t.textContent=m||'Copiado com sucesso!';t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),e?3000:1800)}
+async function copy(s){let ok=false;try{await navigator.clipboard.writeText(s);ok=true}catch(e){}
+ if(!ok){const a=document.createElement('textarea');a.value=s;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();try{ok=document.execCommand('copy')}catch(e){}a.remove()}
+ ok?toast():toast('Não foi possível copiar. Selecione o texto e copie manualmente.',1)}
+const cbtn=(c,l,cls='')=>`<button class="btn sm ${cls}" data-a="copy" data-c="${c}">${ico('copy')}${l}</button>`;
+
+/* ===== TEXTOS PARA COPIAR ===== */
+const blkTxt=b=>b.label+'\n\n'+b.text;
+function copyText(c){const [k,id,j]=c.split('|');
+ if(k==='sa'){const s=ST.find(x=>x.id===id);return s.date+' — '+s.title+'\n\n'+s.blk.map(blkTxt).join('\n\n')}
+ if(k==='s'){return blkTxt(ST.find(x=>x.id===id).blk[j])}
+ const p=IG.find(x=>x.id===id);
+ if(k==='ic')return blkTxt(p.cards[j]);
+ if(k==='il')return p.cap+'\n\n'+p.tags;
+ if(k==='ia')return p.num+' — '+p.title+'\n\n'+p.cards.map(blkTxt).join('\n\n')+'\n\nLEGENDA:\n\n'+p.cap+'\n\n'+p.tags;
+ if(k==='g')return GG.find(x=>x.id===id).blk[2].text;
+ if(k==='v')return VP.find(x=>x.id===id).blk[0].text}
+
+/* ===== VIEWS ===== */
+function vVisao(){
+ const tot=ITEMS.length,done=ITEMS.filter(i=>stat(i.id)===2).length,pc=Math.round(done/tot*100);
+ const grp=[['Stories','Stories','sequências de Stories'],['Instagram','Instagram','publicações para o Instagram'],['Google','Google','publicações para o Google'],['Grupo VIP','Grupo VIP','ações do Grupo VIP']];
+ const T=['stories','instagram','google','vip'],G=ITEMS;
+ const cnt=g=>[G.filter(i=>i.ch===g).length,G.filter(i=>i.ch===g&&stat(i.id)===2).length];
+ const nx=ITEMS.filter(i=>stat(i.id)!==2).sort((a,b)=>a.dk-b.dk).slice(0,6);
+ return `<div class="pg-h"><h1>Olá, Ale! ❤️</h1><p>Seu conteúdo está organizado. Aqui você encontra tudo o que precisa para publicar, acompanhar e manter sua presença digital ativa.</p></div>
+ <div class="stats">${grp.map((g,i)=>{const [n,d]=cnt(g[0]);return `<button class="card stat" data-a="nav" data-t="${T[i]}">${ico(T[i]==='stories'?'stories':T[i]==='vip'?'vip':T[i])}<b>${n}</b><span>${g[2]}</span><small>${d} de ${n} concluídas</small></button>`}).join('')}</div>
+ <div class="card prog"><div class="prog-top"><div><p class="kick" style="margin:0 0 4px">Progresso geral</p><span>${done} de ${tot} atividades concluídas</span></div><b>${pc}%</b></div><div class="bar"><i style="width:${pc}%"></i></div>
+ <div class="mini">${grp.map(g=>{const [n,d]=cnt(g[0]);return `<div>${g[0]} · ${d}/${n}<div class="bar"><i style="width:${d/n*100}%"></i></div></div>`}).join('')}</div></div>
+ <p class="kick">PRÓXIMAS PUBLICAÇÕES</p>
+ ${nx.length?`<div class="up">${nx.map(i=>`<div class="card"><div class="row"><span class="date">${i.dk===9999?'A confirmar':i.date}</span><span class="chan">${i.ch}</span>${badge(i.id)}</div><h3>${esc(i.title)}</h3>${i.obj?`<p class="obj"><strong>Objetivo:</strong> ${esc(i.obj)}</p>`:''}<button class="btn sm" data-a="go" data-t="${i.tab}" data-i="${i.id}">Ver conteúdo ${ico('arrow')}</button></div>`).join('')}</div>`:`<div class="card pn">Tudo publicado. Parabéns, Ale! 🪷</div>`}`}
+
+function vStories(){
+ const s=ST.find(x=>x.id===selS)||ST[0],st=stat(s.id);
+ return `<div class="pg-h"><h1>Stories</h1><p>Escolha uma data para ver os textos prontos da sequência.</p></div>
+ <div class="lay"><div class="dates">${ST.map(x=>`<button class="dt ${x.id===s.id?'on':''}" data-a="sel" data-i="${x.id}"><b>${x.date}</b><span>${esc(x.title)}</span><i class="dot s${stat(x.id)}"></i></button>`).join('')}</div>
+ <div class="card pn" id="el-${s.id}"><div class="row"><span class="date">${s.date}</span>${badge(s.id)}</div><h2>${esc(s.title)}</h2>
+ <div class="meta"><p><strong>Objetivo estratégico:</strong> ${esc(s.meta.OBJ)}</p><p><strong>Quantidade:</strong> ${s.blk.length} ${s.blk.length>1?'Stories':'Story'}</p><div class="vis"><strong>Orientação visual:</strong> ${esc(s.meta.VIS)}</div></div>
+ <div class="acts">${cbtn('sa|'+s.id,'COPIAR TODOS OS STORIES')}<button class="btn ${st===2?'ghost':''}" data-a="stv" data-i="${s.id}" data-v="${st===2?0:2}">${ico('check')}${st===2?'Publicada — desfazer':'Marcar como publicada'}</button>
+ <div class="seg">${SL.map((l,v)=>`<button class="${st===v?'on':''}" data-a="stv" data-i="${s.id}" data-v="${v}">${l}</button>`).join('')}</div></div>
+ <div class="sts">${s.blk.map((b,j)=>{const [a,n]=b.label.split(' — ');return `<div class="st"><div class="st-h"><b>${a}${n?' · '+n:''}</b>${cbtn('s|'+s.id+'|'+j,'Copiar Story','ghost')}</div><p class="txt">${txt(b.text)}</p></div>`}).join('')}</div></div></div>`}
+
+function vInsta(){
+ return `<div class="pg-h"><h1>Posts do Instagram</h1><p>Quatro publicações. Abra um post para copiar os cards, a legenda e acompanhar o checklist.</p></div>
+ ${IG.map(p=>`<div class="card acc ${openI===p.id?'open':''}" id="el-${p.id}"><button class="acc-h" data-a="oi" data-i="${p.id}"><span class="date">${p.date}</span><span class="tt">${p.num} — ${esc(p.title)}</span>${badge(p.id)}<span class="ch">${ico('chev')}</span></button>
+ <div class="acc-b"><div class="kv"><p><strong>Data:</strong> ${p.date}/2026</p><p><strong>Formato:</strong> ${esc(p.meta.FMT)}</p></div><p><strong>Objetivo:</strong> ${esc(p.meta.OBJ)}</p>
+ <div class="acts" style="margin-top:16px">${cbtn('ia|'+p.id,'Copiar todo o post')}</div>
+ <p class="sub">Cards</p><div class="sts">${p.cards.map((b,j)=>`<div class="st"><div class="st-h"><b>${esc(b.label)}</b>${cbtn('ic|'+p.id+'|'+j,'Copiar card','ghost')}</div><p class="txt">${txt(b.text)}</p></div>`).join('')}</div>
+ <p class="sub">Legenda e hashtags</p><div class="st"><div class="st-h"><b>Legenda</b>${cbtn('il|'+p.id,'Copiar legenda','ghost')}</div><p class="txt">${txt(p.cap)}</p><p class="tags">${esc(p.tags)}</p></div>
+ <p class="sub">Checklist de publicação</p>${CK.map((c,j)=>`<label class="chk"><input type="checkbox" data-a="ck" data-k="ck:${p.id}:${j}" ${S['ck:'+p.id+':'+j]?'checked':''}>${c}</label>`).join('')}</div></div>`).join('')}`}
+
+function vGoogle(){
+ return `<div class="pg-h"><h1>Posts do Google</h1><p>Seção de acompanhamento: a publicação é realizada por Kely.</p></div>
+ ${GG.map(p=>`<div class="card pn" id="el-${p.id}" style="margin-bottom:20px"><div class="row"><span class="date">${p.date}</span>${badge(p.id)}</div><h2>${p.num} — ${esc(p.title)}</h2>
+ <p class="sub">Título da arte</p><p class="txt"><strong>${esc(p.blk[0].text)}</strong></p>
+ <p class="sub">Texto principal da arte</p><p class="txt">${esc(p.blk[1].text)}</p>
+ <p class="sub">Legenda completa</p><div class="st"><p class="txt">${esc(p.blk[2].text)}</p></div>
+ <div class="acts" style="margin-top:16px">${cbtn('g|'+p.id,'Copiar legenda')}</div>
+ <p class="obj"><strong>Status:</strong> Publicação realizada por Kely</p>
+ <label class="chk"><input type="checkbox" data-a="stc" data-i="${p.id}" ${stat(p.id)===2?'checked':''}>Kely já publicou</label></div>`).join('')}`}
+
+function vVip(){
+ return `<div class="pg-h"><h1>Estratégia do Grupo VIP</h1><p>Nove ações, uma por data. Copie a mensagem, envie no grupo e marque como publicada.</p></div>
+ <div class="card goal"><p class="kick">OBJETIVO DO GRUPO</p><p>Transformar o Grupo VIP em um espaço de relacionamento, informação e oportunidades exclusivas para as participantes.</p>
+ <div class="pil"><div><b>Relacionamento</b><span>mensagens de acolhimento e proximidade.</span></div><div><b>Conteúdo</b><span>dicas de autocuidado e informações sobre os tratamentos.</span></div><div><b>Exclusividade</b><span>ofertas e condições especiais para as participantes.</span></div></div></div>
+ <div class="vipo"><h3>OFERTA ESPECIAL VIP</h3><p>Limpeza de pele + retorno para revitalização em 15 dias.</p><p><strong>Investimento: R$ 250,00.</strong></p><p>Essa condição deve ser apresentada como uma experiência exclusiva, diferente da oferta pública de R$ 150,00.</p></div>
+ ${VP.map(p=>`<div class="card acc ${openV===p.id?'open':''}" id="el-${p.id}"><button class="acc-h" data-a="ov" data-i="${p.id}"><span class="date">${p.date}</span><span class="tt">${esc(p.title)}</span>${badge(p.id)}<span class="ch">${ico('chev')}</span></button>
+ <div class="acc-b"><p class="sub">Mensagem</p><div class="st"><p class="txt">${esc(p.blk[0].text)}</p></div>
+ <div class="acts" style="margin-top:16px">${cbtn('v|'+p.id,'Copiar mensagem')}</div>
+ <label class="chk"><input type="checkbox" data-a="stc" data-i="${p.id}" ${stat(p.id)===2?'checked':''}>Publicado no grupo</label></div></div>`).join('')}`}
+
+function render(){
+ const V={visao:vVisao,stories:vStories,instagram:vInsta,google:vGoogle,vip:vVip}[tab];
+ $('#main').innerHTML=V();
+ $('#nav').innerHTML=TABS.map(t=>`<button class="${t[0]===tab?'on':''}" data-a="nav" data-t="${t[0]}">${ico(t[3])}${t[1]}</button>`).join('');
+ $('#bot').innerHTML=TABS.map(t=>`<button class="${t[0]===tab?'on':''}" data-a="nav" data-t="${t[0]}">${ico(t[3])}${t[2]}</button>`).join('')}
+
+function nav(t){tab=t;history.replaceState(null,'','#'+t);render();window.scrollTo(0,0)}
+function go(t,i){tab=t;if(t==='stories')selS=i;if(t==='instagram')openI=i;if(t==='vip')openV=i;history.replaceState(null,'','#'+t);render();
+ requestAnimationFrame(()=>{const e=document.getElementById('el-'+i);if(e)e.scrollIntoView({behavior:'smooth',block:'start'});else window.scrollTo(0,0)})}
+
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el||el.tagName==='INPUT')return;const d=el.dataset;
+ switch(d.a){case 'nav':nav(d.t);break;case 'go':go(d.t,d.i);break;
+ case 'sel':selS=d.i;render();break;
+ case 'copy':copy(copyText(d.c));break;
+ case 'stv':put('st:'+d.i,+d.v);break;
+ case 'oi':openI=openI===d.i?null:d.i;render();break;
+ case 'ov':openV=openV===d.i?null:d.i;render();break}});
+document.addEventListener('change',e=>{const el=e.target;if(el.tagName!=='INPUT')return;const d=el.dataset;
+ if(d.a==='ck')put(d.k,el.checked);if(d.a==='stc')put('st:'+d.i,el.checked?2:0)});
+
+const h=location.hash.slice(1);if(TABS.some(t=>t[0]===h))tab=h;
+loadLocal();render();setSync();initDb();
+</script>
+</body>
+</html>
